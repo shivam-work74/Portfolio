@@ -15,10 +15,10 @@ const projects = [
     demo: "https://shivam-devtinder.vercel.app",
   },
   {
-    title: "AlgoArena",
-    description: "Online platform for solving coding challenges.",
-    github: "https://github.com/shivam-work74/AlgoArena",
-    demo: "https://shivam-algoarena.vercel.app",
+    title: "Tic-Tac-Toe",
+    description: "just a mini game to make you stressfree.",
+    github: "https://github.com/shivam-work74/Tic_Tac_Toe.git",
+    demo: "https://tic-tac-dwr560aso-shivam-s-projects-6c11e3bb.vercel.app",
   },
   {
     title: "EduDev",
@@ -36,7 +36,7 @@ const projects = [
     title: "Profile Viewer",
     description: "GitHub profile search and viewer app.",
     github: "https://github.com/shivam-work74/Profile-Viewer",
-    demo: "https://shivam-profileviewer.vercel.app",
+    demo: "https://githubprofile-viewer-ou0shu4sf-shivam-s-projects-6c11e3bb.vercel.app",
   },
 ];
 

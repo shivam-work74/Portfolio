@@ -6,7 +6,7 @@ const projects = [
   title: "RESUME-BUILDER",
   description: "AI-powered resume builder that saves and worth your time.",
   github: "https://github.com/shivam-work74/Resume-builder.git",
-  demo: "https://resume-builder.vercel.app", 
+  demo: "https://resume-builder-liart-theta.vercel.app/", 
 },
 ,
   {
@@ -31,7 +31,7 @@ const projects = [
     title: "Quick Quiz",
     description: "Interactive quiz application.",
     github: "https://github.com/shivam-work74/Quick-Quiz",
-    demo: "https://shivam-quickquiz.vercel.app",
+    demo: "https://quick-quiz-tau.vercel.app/~",
   },
   {
     title: "Profile Viewer",

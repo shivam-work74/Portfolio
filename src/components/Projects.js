@@ -2,12 +2,13 @@ import React from "react";
 import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
 
 const projects = [
-  {
-    title: "Netflix-GPT",
-    description: "AI-powered Netflix clone for movie recommendations.",
-    github: "https://github.com/shivam-work74/Netflix-GPT",
-    demo: "https://shivam-netflix-gpt.vercel.app",
-  },
+{
+  title: "RESUME-BUILDER",
+  description: "AI-powered resume builder that saves and worth your time.",
+  github: "https://github.com/shivam-work74/Resume-builder.git",
+  demo: "https://resume-builder.vercel.app", 
+},
+,
   {
     title: "DevTinder",
     description: "Developer matchmaking platform.",

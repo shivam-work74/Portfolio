@@ -31,7 +31,7 @@ const projects = [
     title: "Quick Quiz",
     description: "Interactive quiz application.",
     github: "https://github.com/shivam-work74/Quick-Quiz",
-    demo: "https://quick-quiz-tau.vercel.app/~",
+    demo: "https://quick-quiz-tau.vercel.app/",
   },
   {
     title: "Profile Viewer",

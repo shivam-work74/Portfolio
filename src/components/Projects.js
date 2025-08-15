@@ -10,10 +10,10 @@ const projects = [
 },
 ,
   {
-    title: "DevTinder",
-    description: "Developer matchmaking platform.",
-    github: "https://github.com/shivam-work74/DevTinder",
-    demo: "https://shivam-devtinder.vercel.app",
+    title: "domineering-game",
+    description: "Say your boredom goodbye bcs here is the mini game you needed.",
+    github: "https://github.com/shivam-work74/Domineering-game.git",
+    demo: "https://domineering-game.vercel.app/",
   },
   {
     title: "Tic-Tac-Toe",

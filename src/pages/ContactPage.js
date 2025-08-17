@@ -128,27 +128,27 @@ const ContactPage = () => {
               type="text"
               name="name"
               placeholder="Your Name"
-              className="w-full px-4 py-3 rounded-xl bg-gray-900/80 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"
+              className="w-full px-4 py-3 rounded-xl bg-gray-900/80 border border-gray-600 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"
               required
             />
             <input
               type="email"
               name="email"
               placeholder="Your Email"
-              className="w-full px-4 py-3 rounded-xl bg-gray-900/80 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"
+              className="w-full px-4 py-3 rounded-xl bg-gray-900/80 border border-gray-600 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"
               required
             />
             <input
               type="text"
               name="title"
               placeholder="Subject"
-              className="w-full px-4 py-3 rounded-xl bg-gray-900/80 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"
+              className="w-full px-4 py-3 rounded-xl bg-gray-900/80 border border-gray-600 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"
             />
             <textarea
               name="message"
               rows="5"
               placeholder="Your Message"
-              className="w-full px-4 py-3 rounded-xl bg-gray-900/80 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"
+              className="w-full px-4 py-3 rounded-xl bg-gray-900/80 border border-gray-600 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"
               required
             ></textarea>
 

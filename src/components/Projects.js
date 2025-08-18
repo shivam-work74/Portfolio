@@ -27,12 +27,12 @@ const projects = [
     tags: ["React", "Game"],
   },
   {
-    title: "EduDev",
-    description: "Educational platform for learning web development.",
-    github: "https://github.com/shivam-work74/EduDev",
-    demo: "https://shivam-edudev.vercel.app",
-    image: "/edudev.png",
-    tags: ["React", "Education", "Tailwind"],
+    title: "Story-Forge",
+    description: "A unique type of stor based game you need to take a look.",
+    github: "https://github.com/shivam-work74/Story-Forge.git",
+    demo: "https://story-forge-olive.vercel.app/",
+    image: "/storyforge.png",
+    tags: ["React", "game", "Tailwind"],
   },
   {
     title: "Quick Quiz",

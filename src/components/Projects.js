@@ -37,10 +37,10 @@ const projects = [
   {
     title: "Diamond-Thief",
     description: "Interactive gaming experience.",
-    github: "https://github.com/shivam-work74/Quick-Quiz",
+    github: "https://github.com/shivam-work74/DIAMOND-THIEF.git",
     demo: "https://diamond-thief.vercel.app/",
     image: "/quiz.png",
-    tags: ["React", "Quiz"],
+    tags: ["React", "Game"],
   },
   {
     title: "Profile Viewer",

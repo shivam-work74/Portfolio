@@ -35,10 +35,10 @@ const projects = [
     tags: ["React", "game", "Tailwind"],
   },
   {
-    title: "Quick Quiz",
-    description: "Interactive quiz application.",
+    title: "Diamond-Thief",
+    description: "Interactive gaming experience.",
     github: "https://github.com/shivam-work74/Quick-Quiz",
-    demo: "https://quick-quiz-tau.vercel.app/",
+    demo: "https://diamond-thief.vercel.app/",
     image: "/quiz.png",
     tags: ["React", "Quiz"],
   },

@@ -14,7 +14,7 @@ const Navbar = () => {
           to="/"
           className="text-3xl font-extrabold tracking-wider bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-500 bg-clip-text text-transparent hover:scale-110 transition-transform duration-300"
         >
-          Shivam<span className="text-gray-300">Dev</span>
+          WELCOME...<span className="text-gray-300"></span>
         </Link>
 
         {/* Desktop Menu */}

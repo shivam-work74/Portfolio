@@ -56,6 +56,14 @@ const projects = [
     tags: ["React", "API", "Web App"],
     category: "Web App",
   },
+  {
+    title: "Fools-Fortune",
+    description: "A interesting and unique game of cards.",
+    github: "https://github.com/shivam-work74/Fools-Fortune.git",
+    demo: "https://fools-fortune-c2yp.vercel.app/",
+    image: "/fortune.png",
+    tags: ["React", "API"],
+  },
 ];
 
 const categories = ["All", "Game", "Web App", "Education"];

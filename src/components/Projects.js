@@ -50,6 +50,14 @@ const projects = [
     image: "/profile.png",
     tags: ["React", "API"],
   },
+  {
+    title: "Fools-Fortune",
+    description: "A interesting and unique game of cards.",
+    github: "https://github.com/shivam-work74/Fools-Fortune.git",
+    demo: "https://fools-fortune-c2yp.vercel.app/",
+    image: "/fortune.png",
+    tags: ["React", "API"],
+  },
 ];
 
 const Projects = () => {

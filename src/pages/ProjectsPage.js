@@ -60,7 +60,7 @@ const projects = [
     title: "Fools-Fortune",
     description: "A interesting and unique game of cards.",
     github: "https://github.com/shivam-work74/Fools-Fortune.git",
-    demo: "https://fools-fortune-z47n.vercel.app/",
+    demo: "https://fools-fortune-rqzq.vercel.app/",
     image: "/fortune.png",
     tags: ["React", "API"],
   },

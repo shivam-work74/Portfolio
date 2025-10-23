@@ -88,7 +88,7 @@ const ContactPage = () => {
           {/* Social Links */}
           <div className="mt-8 flex gap-6 text-2xl">
             <a
-              href="https://github.com/yourgithub"
+              href="https://github.com/shivam-work74/shivam-work74.git"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-300 hover:text-pink-400 transition"
@@ -96,7 +96,7 @@ const ContactPage = () => {
               <FaGithub />
             </a>
             <a
-              href="https://linkedin.com/in/yourlinkedin"
+              href="https://www.linkedin.com/in/shivam-kumar-88057b377/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-300 hover:text-blue-400 transition"

@@ -22,7 +22,7 @@ const About = () => {
           {/* Image card */}
           <div className="relative w-72 h-72 rounded-3xl overflow-hidden border border-gray-700 shadow-2xl">
             <img
-              src="/profile.jpg" // <-- put your profile image in /public/profile.jpg
+              src="/profile.jpeg" // <-- put your profile image in /public/profile.jpg
               alt="Shivam Kumar"
               className="w-full h-full object-cover transform group-hover:scale-105 transition duration-500"
             />

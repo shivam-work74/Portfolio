@@ -77,7 +77,7 @@ const Contact = () => {
               <FaGithub />
             </a>
             <a
-              href="https://linkedin.com/in/shivam-kumar"
+              href="https://www.linkedin.com/in/shivam-kumar-88057b377/"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-blue-600 transition"

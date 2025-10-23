@@ -45,7 +45,7 @@ const AboutPage = () => {
                 <div className="w-full aspect-square overflow-hidden rounded-xl mb-4">
                   {/* Put your image at public/profile.jpg */}
                   <img
-                    src="/profile.jpeg"
+                    src="/profile.jpg"
                     alt="Shivam Kumar"
                     className="w-full h-full object-cover transform group-hover:scale-105 transition duration-500"
                   />

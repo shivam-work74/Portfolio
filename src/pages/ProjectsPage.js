@@ -11,6 +11,15 @@ const projects = [
     tags: ["React", "API"],
     category: "Web App",
   },
+   {
+    title: "Learn-Sphere",
+    description: "A comprehensive learning platform for all your needs.",
+    github: "https://github.com/shivam-work74/learn-sphere.git",
+    demo: "https://learn-sphere-seven-pi.vercel.app/",
+    image: "/learnsphere.png",
+    tags: ["React", "API"],
+    category: "Education",
+  },
   {
     title: "RESUME-BUILDER",
     description: "AI-powered resume builder that saves and worth your time.",

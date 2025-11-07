@@ -2,6 +2,14 @@ import React from "react";
 import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
 
 const projects = [
+   {
+    title: "Cine-Match",
+    description: "A interesting and unique tinder alike swipping for movies app.",
+    github: "https://github.com/shivam-work74/CineMatch.git",
+    demo: "https://cine-match-sable.vercel.app/",
+    image: "/cinematch.png",
+    tags: ["React", "API"],
+  },
   {
     title: "RESUME-BUILDER",
     description: "AI-powered resume builder that saves and worth your time.",
@@ -58,6 +66,7 @@ const projects = [
     image: "/fortune.png",
     tags: ["React", "API"],
   },
+ 
 ];
 
 const Projects = () => {

@@ -7,4 +7,44 @@ html, body {
   margin: 0;
   padding: 0;
 }
- 
+ @keyframes aurora-move {
+  0% {
+    transform: translate(0px, 0px);
+  }
+  50% {
+    transform: translate(100px, 50px);
+  }
+  100% {
+    transform: translate(0px, 0px);
+  }
+}
+
+.animate-aurora-move {
+  animation: aurora-move 20s infinite alternate ease-in-out;
+}
+
+/* 2. Animation for the "Shiny" Button Border */
+@keyframes border-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-border-spin {
+  animation: border-spin 6s linear infinite;
+}
+@keyframes border-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-border-spin {
+  animation: border-spin 6s linear infinite;
+}

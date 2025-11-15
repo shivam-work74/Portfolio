@@ -1,97 +1,260 @@
-import React from "react";
-import { FaUniversity, FaLaptopCode, FaCode, FaDownload } from "react-icons/fa";
+import React, { useRef, useState, useEffect } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { FaUniversity, FaLaptopCode, FaCode, FaDownload, FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
 
+const profileImage = "/profile.jpg"; // Ensure this exists in public/
+
+// --- Mouse position hook ---
+const useMousePosition = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  return mousePosition;
+};
+
+// ------------------- 3D Tilt Card -------------------
+const TiltImageCard = () => {
+  const ref = useRef(null);
+
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const xSpring = useSpring(x, { stiffness: 200, damping: 20 });
+  const ySpring = useSpring(y, { stiffness: 200, damping: 20 });
+
+  const rotateX = useTransform(ySpring, [-0.5, 0.5], ["15deg", "-15deg"]);
+  const rotateY = useTransform(xSpring, [-0.5, 0.5], ["-15deg", "15deg"]);
+
+  const glareX = useTransform(xSpring, [-0.5, 0.5], ["-100%", "180%"]);
+  const glareY = useTransform(ySpring, [-0.5, 0.5], ["-80%", "200%"]);
+
+  const handleMove = (e) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const mouseX = (e.clientX - rect.left) / rect.width - 0.5;
+    const mouseY = (e.clientY - rect.top) / rect.height - 0.5;
+    x.set(mouseX);
+    y.set(mouseY);
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMove}
+      onMouseLeave={() => {
+        x.set(0);
+        y.set(0);
+      }}
+      style={{ rotateX, rotateY }}
+      className="relative w-80 h-80 md:w-96 md:h-96"
+    >
+      <div className="absolute inset-0 rounded-3xl border border-emerald-500/40 bg-gray-900 shadow-xl overflow-hidden">
+        <img
+          src={profileImage}
+          alt="Shivam Kumar"
+          className="w-full h-full object-cover rounded-3xl"
+        />
+
+        {/* Shiny glare */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none rounded-3xl"
+          style={{
+            background: `radial-gradient(circle at ${glareX} ${glareY}, rgba(255,255,255,0.25), transparent 40%)`,
+            mixBlendMode: "overlay",
+          }}
+        />
+      </div>
+    </motion.div>
+  );
+};
+
+// ------------------- Framer Motion variants -------------------
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: 'spring', stiffness: 100 },
+  },
+};
+
+// ------------------- About Section -------------------
 const About = () => {
+  const { x, y } = useMousePosition();
+  
+  const info = [
+    { icon: <FaUniversity />, text: "MCA Student" },
+    { icon: <FaLaptopCode />, text: "Full-Stack Developer" },
+    { icon: <FaCode />, text: "Problem Solver" },
+  ];
+
   return (
     <section
       id="about"
-      className="relative min-h-screen flex flex-col md:flex-row items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white px-6 md:px-20 py-20 overflow-hidden"
+      className="relative min-h-screen flex items-center bg-gray-900 text-gray-100 overflow-hidden pt-24"
+      style={{
+        // --- NEW MOUSE EFFECT (using 'emerald' green) ---
+        background: `
+          radial-gradient(
+            600px circle at ${x}px ${y}px, 
+            rgba(16, 185, 129, 0.15), /* <-- FIXED: Using default 'emerald' color */
+            transparent 80%
+          ),
+          #111827 /* <-- bg-gray-900 */
+        `,
+      }}
     >
-      {/* Floating Background Blobs */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-        <span className="absolute w-80 h-80 bg-blue-500 opacity-10 rounded-full top-20 left-10 blur-3xl animate-blob animation-delay-2000"></span>
-        <span className="absolute w-96 h-96 bg-purple-500 opacity-10 rounded-full bottom-20 right-20 blur-3xl animate-blob animation-delay-4000"></span>
-      </div>
+      {/* --- Subtle Grid Background --- */}
+      <div
+        className="absolute inset-0 z-10"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),' +
+            'linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)',
+          backgroundSize: '30px 30px',
+        }}
+      />
+      
+      <div className="relative z-20 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center p-4 md:p-20">
 
-      {/* Left: Profile image card */}
-      <div className="md:w-1/2 flex justify-center relative mb-12 md:mb-0">
-        <div className="relative group">
-          {/* Gradient border */}
-          <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-3xl blur opacity-60 group-hover:opacity-90 transition duration-500 animate-pulse"></div>
-
-          {/* Image card */}
-          <div className="relative w-72 h-72 rounded-3xl overflow-hidden border border-gray-700 shadow-2xl">
-            <img
-              src="/profile.jpg" // <-- put your profile image in /public/profile.jpg
-              alt="Shivam Kumar"
-              className="w-full h-full object-cover transform group-hover:scale-105 transition duration-500"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Right: About text */}
-      <div className="md:w-1/2 md:pl-12 relative z-10 flex flex-col justify-center">
-        <h2 className="text-4xl md:text-5xl font-extrabold mb-6 animate-slideIn">
-          About Me
-        </h2>
-        <p className="text-lg text-gray-300 leading-relaxed mb-4 animate-fadeIn">
-          Hi, I’m <span className="text-blue-400 font-semibold">Shivam Kumar</span>, 
-          an <span className="text-purple-400">MCA student</span> and 
-          passionate <span className="text-pink-400">Full-Stack Developer</span>.
-        </p>
-        <p className="text-lg text-gray-400 leading-relaxed mb-8 animate-fadeIn delay-200">
-          I focus on creating <span className="text-blue-400">modern, responsive, and scalable</span> web applications 
-          using React, Node.js, and Tailwind CSS. My goal is to combine 
-          clean design with powerful functionality to deliver 
-          professional results.
-        </p>
-
-        {/* Resume Button */}
-        <a
-          href="/resume.pdf" // <-- put your resume file in /public/resume.pdf
-          download
-          className="inline-flex items-center px-6 py-3 mb-10 rounded-xl font-medium text-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:from-purple-600 hover:to-pink-500 transition transform hover:scale-105 shadow-lg"
+        {/* LEFT - 3D Image */}
+        <motion.div
+          className="flex justify-center items-center h-96"
+          initial={{ opacity: 0, scale: 0.85 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ type: "spring", stiffness: 80, damping: 15 }}
         >
-          <FaDownload className="mr-2 text-white" />
-          Download Resume
-        </a>
+          <TiltImageCard />
+        </motion.div>
 
-        {/* Highlighted Info Boxes */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <div className="flex flex-col items-center bg-gray-800/50 backdrop-blur-lg p-4 rounded-xl shadow-lg hover:scale-105 transition">
-            <FaUniversity className="text-blue-400 text-3xl mb-2" />
-            <span className="text-gray-300 text-sm">MCA Student</span>
-          </div>
-          <div className="flex flex-col items-center bg-gray-800/50 backdrop-blur-lg p-4 rounded-xl shadow-lg hover:scale-105 transition">
-            <FaLaptopCode className="text-purple-400 text-3xl mb-2" />
-            <span className="text-gray-300 text-sm">Full-Stack Dev</span>
-          </div>
-          <div className="flex flex-col items-center bg-gray-800/50 backdrop-blur-lg p-4 rounded-xl shadow-lg hover:scale-105 transition">
-            <FaCode className="text-pink-400 text-3xl mb-2" />
-            <span className="text-gray-300 text-sm">Problem Solver</span>
-          </div>
-        </div>
+        {/* RIGHT - Text */}
+        <motion.div
+          className="flex flex-col items-center md:items-start text-center md:text-left"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.p
+            // FIXED: Using 'text-emerald-500'
+            className="text-lg md:text-xl text-emerald-500 font-medium mb-4"
+            variants={itemVariants}
+          >
+            👋 Hi, I'm Shivam Kumar
+          </motion.p>
+
+          <motion.h1
+            className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight"
+            variants={itemVariants}
+          >
+            I'm a <span className="text-green bg-clip-text bg-gradient-to-r from-emerald-500 to-sky-500"> {/* <-- FIXED: 'emerald' to 'sky' gradient */}
+              Full-Stack Developer
+            </span>{' '}
+          </motion.h1>
+
+          <motion.p
+            // Using default 'text-gray-400'
+            className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl"
+            variants={itemVariants}
+          >
+            As a Full-Stack Developer and MCA student, I specialize in turning complex ideas 
+            into responsive, high-performance applications that users love.
+          </motion.p>
+
+          {/* --- "Shiny" Button with NEW Colors --- */}
+          <motion.div
+            className="flex flex-col sm:flex-row gap-6 mb-10"
+            variants={itemVariants}
+          >
+            <a
+              href="/resume.pdf"
+              download
+              className="group relative inline-block text-lg font-medium"
+            >
+              {/* FIXED: 'emerald'/'sky' gradient */}
+              <span 
+                className="absolute inset-0 rounded-lg bg-gradient-to-r from-emerald-600 via-sky-500 to-emerald-500 opacity-75 blur-lg transition-all duration-300 group-hover:opacity-100 group-hover:blur-xl animate-border-spin" 
+              />
+              
+              {/* This is the actual button content */}
+              <span className="relative flex items-center justify-center px-8 py-3 bg-gray-800 rounded-lg shadow-lg"> {/* Using 'bg-gray-800' */}
+                <FaDownload className="mr-2" />
+                Download Resume
+              </span>
+            </a>
+          </motion.div>
+
+          {/* Info Boxes */}
+          <motion.div
+            variants={itemVariants}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10"
+          >
+            {info.map((item, idx) => (
+              <motion.div
+                key={idx}
+                whileHover={{ y: -6, scale: 1.03 }}
+                className="bg-gray-800/60 p-5 rounded-xl shadow-lg backdrop-blur-md flex flex-col items-center sm:items-start"
+              >
+                <div className="text-emerald-400 text-3xl mb-2">{item.icon}</div>
+                <span className="text-gray-200 font-medium">{item.text}</span>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* Social Links */}
+          <motion.div
+            className="flex gap-8 items-center"
+            variants={itemVariants}
+          >
+            <a
+              href="https://github.com/shivam-work74" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-500 hover:text-gray-100 transition-all"
+              aria-label="GitHub Profile"
+            >
+              <FaGithub className="w-8 h-8" />
+            </a>
+            <a
+              href="https://linkedin.com/in/your-profile" // <-- IMPORTANT: Add your link
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-500 hover:text-emerald-500 transition-all" // FIXED: Hover to 'emerald'
+              aria-label="LinkedIn Profile"
+            >
+              <FaLinkedin className="w-8 h-8" />
+            </a>
+            <a
+              href="https://instagram.com/your-profile" // <-- IMPORTANT: Add your link
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-500 hover:text-pink-500 transition-all"
+              aria-label="Instagram Profile"
+            >
+              <FaInstagram className="w-8 h-8" />
+            </a>
+          </motion.div>
+
+        </motion.div>
       </div>
-
-      {/* Animations */}
-      <style>{`
-        @keyframes slideIn { 0% { transform: translateX(-50px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
-        .animate-slideIn { animation: slideIn 1s ease-out forwards; }
-
-        @keyframes fadeIn { from {opacity:0; transform: translateY(20px);} to{opacity:1; transform: translateY(0);} }
-        .animate-fadeIn { animation: fadeIn 1.5s ease-in-out forwards; }
-        .delay-200 { animation-delay: 0.2s; }
-
-        @keyframes blob { 
-          0%,100%{transform: translate(0,0) scale(1);} 
-          33%{transform: translate(30px,-50px) scale(1.1);} 
-          66%{transform: translate(-20px,20px) scale(0.9);} 
-        }
-        .animate-blob { animation: blob 8s infinite; }
-        .animation-delay-2000 { animation-delay: 2s; }
-        .animation-delay-4000 { animation-delay: 4s; }
-      `}</style>
     </section>
   );
 };

@@ -1,125 +1,291 @@
-import React, { useState } from "react";
-import { FaLinkedin, FaGithub, FaEnvelope, FaInstagram } from "react-icons/fa";
+import React, { useRef, useState, useEffect } from 'react';
+import emailjs from '@emailjs/browser';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { 
+  FaEnvelope, FaPhoneAlt, FaMapMarkerAlt, 
+  FaGithub, FaLinkedin, FaGlobe 
+} from 'react-icons/fa';
 
-const Contact = () => {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+// --- Mouse position hook (Copied from About.js) ---
+const useMousePosition = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  return mousePosition;
+};
+
+// --- 1. NEW: Reusable 3D Tilt Card (Replaces 'react-parallax-tilt') ---
+const TiltCard = ({ children }) => {
+  const ref = useRef(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 20 });
+  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 20 });
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['10deg', '-10deg']);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-10deg', '10deg']);
+
+  const handleMouseMove = (e) => {
+    if (!ref.current) return;
+    const { left, top, width, height } = ref.current.getBoundingClientRect();
+    x.set((e.clientX - left) / width - 0.5);
+    y.set((e.clientY - top) / height - 0.5);
   };
 
-  const handleSubmit = (e) => {
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
+      className="w-full bg-gray-800/50 backdrop-blur-lg border border-gray-700/50 rounded-2xl shadow-xl"
+    >
+      <div style={{ transform: 'translateZ(25px)' }} className="p-8">
+        {children}
+      </div>
+    </motion.div>
+  );
+};
+
+// --- Framer Motion variants ---
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+};
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } },
+};
+
+const Contact = () => {
+  const { x, y } = useMousePosition();
+  const form = useRef();
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(null);
+
+  // --- Your sendEmail function (Unchanged) ---
+  const sendEmail = (e) => {
     e.preventDefault();
-    alert("Thank you! Your message has been received.");
-    setForm({ name: "", email: "", message: "" });
+    setLoading(true);
+
+    emailjs
+      .sendForm(
+        "service_qnjfq2h", // Your Service ID
+        "template_mtox47d", // Your Template ID
+        form.current,
+        "kQru7H3y0RE44yE9g" // Your Public Key
+      )
+      .then(
+        () => {
+          setSuccess(true);
+          setLoading(false);
+          form.current.reset();
+        },
+        () => {
+          setSuccess(false);
+          setLoading(false);
+        }
+      );
   };
 
   return (
     <section
       id="contact"
-      className="relative w-full py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white px-6 md:px-20 overflow-hidden"
+      className="relative min-h-screen bg-gray-900 text-gray-100 py-24 overflow-hidden border-t border-gray-800"
+      style={{
+        // --- 2. NEW: Mouse Glow Background ---
+        background: `
+          radial-gradient(
+            600px circle at ${x}px ${y}px, 
+            rgba(16, 185, 129, 0.15),
+            transparent 80%
+          ),
+          #111827
+        `,
+      }}
     >
-      <h2 className="text-4xl font-bold mb-12 text-center animate-slideIn">
-        Contact Me
-      </h2>
-
-      <div className="flex flex-col md:flex-row justify-center items-start gap-10 relative z-10">
-        {/* Contact Form */}
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col w-full md:w-1/2 bg-gray-800 p-8 rounded-2xl shadow-lg animate-fadeIn"
+      {/* --- 3. NEW: Static Grid Background --- */}
+      <div
+        className="absolute inset-0 z-10"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),' +
+            'linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)',
+          backgroundSize: '30px 30px',
+        }}
+      />
+      
+      <div className="relative z-20 max-w-6xl mx-auto px-6 md:px-12">
+        {/* --- Section Title --- */}
+        <motion.h2 
+          className="text-lg font-mono text-emerald-400 mb-2 text-center"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
         >
-          <input
-            type="text"
-            name="name"
-            placeholder="Your Name"
-            value={form.name}
-            onChange={handleChange}
-            className="mb-4 p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Your Email"
-            value={form.email}
-            onChange={handleChange}
-            className="mb-4 p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-            required
-          />
-          <textarea
-            name="message"
-            placeholder="Your Message"
-            value={form.message}
-            onChange={handleChange}
-            className="mb-4 p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-            rows="5"
-            required
-          />
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-lg transition duration-300"
+          {''}
+        </motion.h2>
+        <motion.h3 
+          className="text-4xl md:text-5xl font-extrabold text-gray-100 mb-12 text-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.1 }}
+        >
+          Get In Touch
+        </motion.h3>
+        
+        <div className="grid lg:grid-cols-2 gap-12">
+          {/* --- LEFT: Contact Info (in new TiltCard) --- */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
           >
-            Send Message
-          </button>
-        </form>
+            <TiltCard>
+              <h3 className="text-3xl font-bold mb-6 text-emerald-400">
+                Contact Details
+              </h3>
+              <ul className="space-y-6 mb-8">
+                <li className="flex items-center gap-4">
+                  <FaEnvelope className="text-emerald-400 text-2xl" />
+                  <span className="text-gray-300 text-lg">shivam.work7488@gmail.com</span>
+                </li>
+                <li className="flex items-center gap-4">
+                  <FaPhoneAlt className="text-emerald-400 text-2xl" />
+                  <span className="text-gray-300 text-lg">+91 7488445603</span>
+                </li>
+                <li className="flex items-center gap-4">
+                  <FaMapMarkerAlt className="text-emerald-400 text-2xl" />
+                  <span className="text-gray-300 text-lg">India</span>
+                </li>
+              </ul>
+              {/* --- 4. NEW: Themed Social Links --- */}
+              <div className="flex gap-6 text-3xl">
+                <a
+                  href="https://github.com/shivam-work74" // <-- Fixed link
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  <FaGithub />
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/shivam-kumar-88057b377/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-sky-500 transition-colors"
+                >
+                  <FaLinkedin />
+                </a>
+                <a
+                  href="https://shivam-work-profile.vercel.app/" // <-- Link to your site
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-emerald-400 transition-colors"
+                >
+                  <FaGlobe />
+                </a>
+              </div>
+            </TiltCard>
+          </motion.div>
+          
+          {/* --- RIGHT: Contact Form (in new TiltCard) --- */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+          >
+            <TiltCard>
+              <h3 className="text-3xl font-bold mb-6 text-sky-400">
+                Send a Message
+              </h3>
+              <form ref={form} onSubmit={sendEmail} className="space-y-5">
+                {/* --- 5. NEW: Themed Inputs --- */}
+                <motion.input
+                  variants={itemVariants}
+                  type="text"
+                  name="name"
+                  placeholder="Your Name"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/80 border border-gray-700/50 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  required
+                />
+                <motion.input
+                  variants={itemVariants}
+                  type="email"
+                  name="email"
+                  placeholder="Your Email"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/80 border border-gray-700/50 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  required
+                />
+                <motion.input
+                  variants={itemVariants}
+                  type="text"
+                  name="title"
+                  placeholder="Subject"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/80 border border-gray-700/50 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                />
+                <motion.textarea
+                  variants={itemVariants}
+                  name="message"
+                  rows="5"
+                  placeholder="Your Message"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/80 border border-gray-700/50 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  required
+                ></motion.textarea>
 
-        {/* Social Links */}
-        <div className="flex flex-col items-center md:items-start gap-6 w-full md:w-1/3 animate-fadeIn">
-          <p className="text-lg font-semibold">Connect with me:</p>
-          <div className="flex space-x-6 text-3xl text-white">
-            <a
-              href="https://github.com/shivam-work74"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-blue-400 transition"
-            >
-              <FaGithub />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/shivam-kumar-88057b377/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-blue-600 transition"
-            >
-              <FaLinkedin />
-            </a>
-            <a
-              href="mailto:shivam.work7488@gmail.com"
-              className="hover:text-red-500 transition"
-            >
-              <FaEnvelope />
-            </a>
-            <a
-              href="https://instagram.com/shivmmm_74"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-pink-500 transition"
-            >
-              <FaInstagram />
-            </a>
-          </div>
+                {/* --- 6. NEW: "Shiny" Submit Button --- */}
+                <motion.button
+                  variants={itemVariants}
+                  type="submit"
+                  disabled={loading}
+                  className="group relative w-full text-lg font-medium disabled:opacity-50"
+                >
+                  <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-emerald-600 via-sky-500 to-emerald-500 opacity-75 blur-lg transition-all duration-300 group-hover:opacity-100 group-hover:blur-xl animate-border-spin" />
+                  <span className="relative flex items-center justify-center w-full px-8 py-3 bg-gray-800 rounded-lg shadow-lg">
+                    {loading ? "Sending..." : "Send Message 🚀"}
+                  </span>
+                </motion.button>
+              </form>
+              
+              {/* --- Themed Success/Error Messages --- */}
+              <AnimatePresence>
+                {success === true && (
+                  <motion.p
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-4 text-green-400 font-medium"
+                  >
+                    ✅ Message sent successfully!
+                  </motion.p>
+                )}
+                {success === false && (
+                  <motion.p
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-4 text-red-400 font-medium"
+                  >
+                    ❌ Failed to send message. Please try again.
+                  </motion.p>
+                )}
+              </AnimatePresence>
+            </TiltCard>
+          </motion.div>
         </div>
       </div>
-
-      {/* Background blobs */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-        <span className="absolute w-72 h-72 bg-purple-500 opacity-20 rounded-full top-10 left-10 animate-blob animation-delay-2000"></span>
-        <span className="absolute w-96 h-96 bg-pink-500 opacity-20 rounded-full top-64 right-20 animate-blob animation-delay-4000"></span>
-      </div>
-
-      <style>{`
-        @keyframes fadeIn { from {opacity:0;} to{opacity:1;} }
-        .animate-fadeIn { animation: fadeIn 1.5s ease-in-out forwards; }
-
-        @keyframes slideIn { 0% { transform: translateY(20px); opacity:0;} 100% { transform: translateY(0); opacity:1;} }
-        .animate-slideIn { animation: slideIn 1s ease-out forwards; }
-
-        @keyframes blob { 0%,100%{transform: translate(0,0) scale(1);} 33%{transform: translate(30px,-50px) scale(1.1);} 66%{transform: translate(-20px,20px) scale(0.9);} }
-        .animate-blob { animation: blob 8s infinite; }
-        .animation-delay-2000 { animation-delay: 2s; }
-        .animation-delay-4000 { animation-delay: 4s; }
-      `}</style>
     </section>
   );
 };

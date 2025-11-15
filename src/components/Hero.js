@@ -1,43 +1,177 @@
-import React from "react";
-import { FaReact, FaNodeJs, FaCss3Alt, FaHtml5, FaJs } from "react-icons/fa";
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
+
+// --- Mouse position hook (This is stable) ---
+const useMousePosition = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  return mousePosition;
+};
+
+// --- Framer Motion variants (These are fine) ---
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: 'spring', stiffness: 100 },
+  },
+};
 
 const Hero = () => {
+  const { x, y } = useMousePosition();
+
   return (
     <section
-      id="hero"
-      className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden text-white px-4"
+      id="home"
+      // Using default 'bg-gray-900' and 'text-gray-100'
+      className="relative min-h-screen flex justify-center items-center bg-gray-900 text-gray-100 overflow-hidden pt-24" // <-- Kept the pt-24 padding
+      style={{
+        // --- NEW MOUSE EFFECT (using 'emerald' green) ---
+        background: `
+          radial-gradient(
+            600px circle at ${x}px ${y}px, 
+            rgba(16, 185, 129, 0.15), /* <-- FIXED: Using default 'emerald' color */
+            transparent 80%
+          ),
+          #111827 /* <-- bg-gray-900 */
+        `,
+      }}
     >
-      {/* Animated Background Blobs */}
-      <div className="absolute w-full h-full top-0 left-0 overflow-hidden">
-        <span className="absolute w-72 h-72 bg-blue-500 opacity-20 rounded-full top-10 left-10 animate-blob animation-delay-2000"></span>
-        <span className="absolute w-96 h-96 bg-purple-500 opacity-20 rounded-full top-64 left-64 animate-blob animation-delay-4000"></span>
-        <span className="absolute w-80 h-80 bg-pink-500 opacity-20 rounded-full top-48 left-32 animate-blob animation-delay-6000"></span>
-      </div>
+      {/* --- Subtle Grid Background --- */}
+      <div
+        className="absolute inset-0 z-10"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),' +
+            'linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)',
+          backgroundSize: '30px 30px',
+        }}
+      />
+      
+      {/* --- Content Container --- */}
+      <div className="relative z-20 flex flex-col items-center text-center p-4 max-w-4xl mx-auto">
+        <motion.div
+          className="flex flex-col items-center"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.p
+            // FIXED: Using 'text-emerald-500'
+            className="text-lg md:text-xl text-emerald-500 font-medium mb-4"
+            variants={itemVariants}
+          >
+            👋 Hi, I'm Shivam Kumar
+          </motion.p>
 
-      {/* Main Content */}
-      <h1 className="text-5xl md:text-7xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 animate-slideIn relative overflow-hidden">
-        Hi, I'm Shivam Kumar
-        <span className="absolute w-full h-1 bg-white opacity-10 top-1/2 left-0 animate-shine"></span>
-      </h1>
+          <motion.h1
+            className="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight"
+            variants={itemVariants}
+          >
+            I Build <span className="text-green bg-clip-text bg-gradient-to-r from-emerald-500 to-sky-500"> {/* <-- FIXED: 'emerald' to 'sky' gradient */}
+              Modern
+            </span>{' '}
+            Web Experiences
+          </motion.h1>
 
-      <p className="text-lg md:text-2xl mb-8 text-center max-w-3xl animate-fadeIn">
-        MCA Student | Full-Stack Developer | Problem Solver  
-        <br />I create interactive and professional web experiences.
-      </p>
+          <motion.p
+            // Using default 'text-gray-400'
+            className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl"
+            variants={itemVariants}
+          >
+            As a Full-Stack Developer, I specialize in turning complex ideas 
+            into responsive, high-performance applications that users love.
+          </motion.p>
 
-      {/* Floating Tech Icons */}
-      <div className="flex space-x-6 mb-8 animate-fadeIn">
-        <FaReact className="text-blue-400 text-4xl hover:scale-125 transition-transform" />
-        <FaNodeJs className="text-green-400 text-4xl hover:scale-125 transition-transform" />
-        <FaHtml5 className="text-orange-500 text-4xl hover:scale-125 transition-transform" />
-        <FaCss3Alt className="text-blue-600 text-4xl hover:scale-125 transition-transform" />
-        <FaJs className="text-yellow-400 text-4xl hover:scale-125 transition-transform" />
+          {/* --- "Shiny" Button with NEW Colors --- */}
+          <motion.div
+            className="flex flex-col sm:flex-row gap-6 mb-10"
+            variants={itemVariants}
+          >
+            <a
+              href="#projects"
+              className="group relative inline-block text-lg font-medium"
+            >
+              {/* FIXED: 'emerald'/'sky' gradient */}
+              <span 
+                className="absolute inset-0 rounded-lg bg-gradient-to-r from-emerald-600 via-sky-500 to-emerald-500 opacity-75 blur-lg transition-all duration-300 group-hover:opacity-100 group-hover:blur-xl animate-border-spin" 
+              />
+              
+              {/* This is the actual button content */}
+              <span className="relative flex items-center justify-center px-8 py-3 bg-gray-800 rounded-lg shadow-lg"> {/* Using 'bg-gray-800' */}
+                View My Work
+                <HiOutlineArrowNarrowRight className="ml-2 transition-transform transform group-hover:translate-x-1" />
+              </span>
+            </a>
+
+            {/* Secondary Button (Simpler) */}
+            <motion.a
+              href="#contact"
+              className="group relative flex items-center justify-center px-8 py-3 bg-gray-800 rounded-lg font-bold text-lg text-gray-300 shadow-lg hover:bg-gray-700"
+              whileHover={{ scale: 1.05, y: -3 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+            >
+              Get in Touch
+            </motion.a>
+          </motion.div>
+
+          {/* Social Links */}
+          <motion.div
+            className="flex gap-8 items-center"
+            variants={itemVariants}
+          >
+            <a
+              href="https://github.com/shivam-work74" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-500 hover:text-gray-100 transition-all"
+              aria-label="GitHub Profile"
+            >
+              <FaGithub className="w-8 h-8" />
+            </a>
+            <a
+              href="https://linkedin.com/in/your-profile" // <-- IMPORTANT: Add your link
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-500 hover:text-emerald-500 transition-all" // FIXED: Hover to 'emerald'
+              aria-label="LinkedIn Profile"
+            >
+              <FaLinkedin className="w-8 h-8" />
+            </a>
+          </motion.div>
+        </motion.div>
       </div>
 
       {/* Scroll Down Arrow */}
       <div className="absolute bottom-10 animate-bounce">
         <svg
-          className="w-8 h-8 text-white"
+          className="w-8 h-8 text-gray-600"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
@@ -46,27 +180,6 @@ const Hero = () => {
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
         </svg>
       </div>
-
-      {/* Animations */}
-      <style>{`
-        @keyframes slideIn { 0% { transform: translateY(-50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
-        .animate-slideIn { animation: slideIn 1s ease-out forwards; }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .animate-fadeIn { animation: fadeIn 2s ease-in-out; }
-
-        @keyframes blob { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(30px,-50px) scale(1.1); } 66% { transform: translate(-20px,20px) scale(0.9); } }
-        .animate-blob { animation: blob 8s infinite; }
-        .animation-delay-2000 { animation-delay: 2s; }
-        .animation-delay-4000 { animation-delay: 4s; }
-        .animation-delay-6000 { animation-delay: 6s; }
-
-        @keyframes shine { 0% { transform: translateX(-100%); opacity: 0; } 50% { transform: translateX(100%); opacity: 0.2; } 100% { transform: translateX(100%); opacity: 0; } }
-        .animate-shine { animation: shine 2.5s infinite; }
-
-        @keyframes bounce { 0%,100%{transform: translateY(0);} 50%{transform: translateY(-10px);} }
-        .animate-bounce { animation: bounce 2s infinite; }
-      `}</style>
     </section>
   );
 };

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaGamepad, FaBrain, FaPlay, FaTrophy } from 'react-icons/fa';
+import { FaGamepad, FaBrain, FaPlay, FaTrophy, FaDragon, FaRocket } from 'react-icons/fa';
 import MiniGame from './MiniGame';
 import MemoryGame from './MemoryGame';
+import SnakeGame from './SnakeGame';
+import FlappyGame from './FlappyGame';
 
 const GameHub = () => {
     const [activeGame, setActiveGame] = useState(null);
@@ -23,6 +25,22 @@ const GameHub = () => {
             icon: <FaBrain className="text-5xl text-neon-pink" />,
             color: 'neon-pink',
             component: MemoryGame
+        },
+        {
+            id: 'cyber-serpent',
+            title: 'CYBER SERPENT',
+            description: 'Navigate the grid, collect data packets, and grow your system. Classic Snake evolved.',
+            icon: <FaDragon className="text-5xl text-neon-green" />,
+            color: 'neon-green',
+            component: SnakeGame
+        },
+        {
+            id: 'gravity-glitch',
+            title: 'GRAVITY GLITCH',
+            description: 'Defy gravity and navigate through the firewall. One tap to jump, infinite challenge.',
+            icon: <FaRocket className="text-5xl text-yellow-400" />,
+            color: 'yellow-400',
+            component: FlappyGame
         }
     ];
 
@@ -48,35 +66,36 @@ const GameHub = () => {
                     </p>
                 </motion.div>
 
-                <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
                     {games.map((game, index) => (
                         <motion.div
                             key={game.id}
-                            initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                            whileInView={{ opacity: 1, x: 0 }}
+                            initial={{ opacity: 0, y: 50 }}
+                            whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
+                            transition={{ delay: index * 0.1 }}
                             whileHover={{ scale: 1.02 }}
-                            className={`glass-panel p-8 rounded-2xl border border-${game.color}/30 hover:border-${game.color} transition-all duration-300 group relative overflow-hidden`}
+                            className={`glass-panel p-8 rounded-2xl border border-${game.color}/30 hover:border-${game.color} transition-all duration-300 group relative overflow-hidden flex flex-col`}
                         >
                             {/* Hover Glow */}
                             <div className={`absolute inset-0 bg-${game.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}></div>
 
-                            <div className="flex flex-col items-center text-center">
+                            <div className="flex flex-col items-center text-center flex-grow">
                                 <div className={`mb-6 p-6 rounded-full bg-gray-900/50 border border-${game.color}/20 group-hover:border-${game.color} group-hover:shadow-[0_0_30px_rgba(0,0,0,0.5)] transition-all duration-300`}>
                                     {game.icon}
                                 </div>
 
-                                <h3 className={`text-3xl font-bold mb-4 text-white group-hover:text-${game.color} transition-colors font-gaming`}>
+                                <h3 className={`text-2xl font-bold mb-4 text-white group-hover:text-${game.color} transition-colors font-gaming`}>
                                     {game.title}
                                 </h3>
 
-                                <p className="text-gray-400 mb-8 min-h-[3rem]">
+                                <p className="text-gray-400 mb-8 flex-grow">
                                     {game.description}
                                 </p>
 
                                 <button
                                     onClick={() => setActiveGame(game.id)}
-                                    className={`group relative px-8 py-3 bg-transparent border border-${game.color} text-${game.color} font-bold uppercase tracking-widest hover:bg-${game.color} hover:text-black transition-all duration-300 clip-path-polygon flex items-center gap-2`}
+                                    className={`group relative px-8 py-3 bg-transparent border border-${game.color} text-${game.color} font-bold uppercase tracking-widest hover:bg-${game.color} hover:text-black transition-all duration-300 clip-path-polygon flex items-center gap-2 w-full justify-center`}
                                 >
                                     <FaPlay className="text-sm" />
                                     Initialize
@@ -107,6 +126,12 @@ const GameHub = () => {
                 )}
                 {activeGame === 'neural-nexus' && (
                     <MemoryGame onClose={() => setActiveGame(null)} />
+                )}
+                {activeGame === 'cyber-serpent' && (
+                    <SnakeGame onClose={() => setActiveGame(null)} />
+                )}
+                {activeGame === 'gravity-glitch' && (
+                    <FlappyGame onClose={() => setActiveGame(null)} />
                 )}
             </AnimatePresence>
         </section>

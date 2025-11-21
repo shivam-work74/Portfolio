@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaGamepad, FaBrain } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import { FaGithub, FaLinkedin, FaGamepad } from 'react-icons/fa';
 import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
-import MiniGame from './MiniGame';
-import MemoryGame from './MemoryGame';
 
 // --- Mouse position hook ---
 const useMousePosition = () => {
@@ -65,7 +63,6 @@ const itemVariants = {
 
 const Hero = () => {
   const { x, y } = useMousePosition();
-  const [activeGame, setActiveGame] = useState(null); // 'cyber-defense' or 'neural-nexus'
 
   return (
     <section
@@ -192,16 +189,6 @@ const Hero = () => {
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
         </svg>
       </div>
-
-      {/* --- Game Modals --- */}
-      <AnimatePresence>
-        {activeGame === 'cyber-defense' && (
-          <MiniGame onClose={() => setActiveGame(null)} />
-        )}
-        {activeGame === 'neural-nexus' && (
-          <MemoryGame onClose={() => setActiveGame(null)} />
-        )}
-      </AnimatePresence>
 
     </section>
   );

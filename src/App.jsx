@@ -1,10 +1,11 @@
-import React, { Suspense, lazy } from 'react'; 
-import Navbar from './components/Navbar'; 
-import Hero from './components/Hero'; 
+import React, { Suspense, lazy } from 'react';
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
 
 // Lazy load our sections
 const About = lazy(() => import('./components/About'));
 const Projects = lazy(() => import('./components/Projects'));
+const TaskShowcase = lazy(() => import('./components/TaskShowcase'));
 const Skills = lazy(() => import('./components/Skills'));
 const Contact = lazy(() => import('./components/Contact')); // <-- 1. IMPORT IT
 
@@ -17,15 +18,17 @@ const SectionLoader = () => (
 
 function App() {
   return (
-    <div className="bg-gray-900">
+    <div className="bg-cyber-black min-h-screen text-white font-gaming bg-grid-pattern relative overflow-x-hidden">
+      <div className="absolute inset-0 bg-radial-gradient from-transparent to-cyber-black pointer-events-none"></div>
       <Navbar />
       <Hero />
-      
+
       <Suspense fallback={<SectionLoader />}>
         <About />
-        <Projects /> 
+        <Projects />
+        <TaskShowcase />
         <Skills />
-        <Contact /> {/* <-- 2. ADD IT HERE */}
+        <Contact />
       </Suspense>
     </div>
   );

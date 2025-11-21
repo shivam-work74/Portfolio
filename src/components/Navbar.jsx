@@ -28,34 +28,33 @@ const Navbar = () => {
   }, []);
 
   const navItems = [
-    { name: 'Home', section: 'home', icon: <FaHome /> },
-    { name: 'About', section: 'about', icon: <FaUser /> },
-    { name: 'Projects', section: 'projects', icon: <FaCode /> },
-    { name: 'Skills', section: 'skills', icon: <FaTools /> },
-    { name: 'Contact', section: 'contact', icon: <FaEnvelope /> },
+    { name: 'MISSION: HOME', section: 'home', icon: <FaHome /> },
+    { name: 'INTEL: ABOUT', section: 'about', icon: <FaUser /> },
+    { name: 'OPERATIONS: PROJECTS', section: 'projects', icon: <FaCode /> },
+    { name: 'ARSENAL: SKILLS', section: 'skills', icon: <FaTools /> },
+    { name: 'COMMS: CONTACT', section: 'contact', icon: <FaEnvelope /> },
   ];
 
   return (
     <>
       {/* --- Scroll Progress Bar --- */}
-      <motion.div 
-        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-sky-500 z-50"
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-neon-green to-neon-blue z-50 shadow-[0_0_10px_var(--neon-green)]"
         style={{ scaleX, originX: 0 }}
       />
 
       {/* --- Desktop Navigation --- */}
       <motion.nav
-        className={`fixed top-0 w-full z-40 transition-all duration-300 ${
-          scrolled 
-            ? 'bg-gray-900/95 backdrop-blur-lg shadow-xl border-b border-gray-800 py-3' 
-            : 'bg-gray-900/80 backdrop-blur-md py-4'
-        }`}
+        className={`fixed top-0 w-full z-40 transition-all duration-300 font-gaming ${scrolled
+            ? 'bg-cyber-black/90 glass-panel border-b border-neon-green/30 py-3'
+            : 'bg-transparent py-4'
+          }`}
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-          
+
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <ScrollLink
               to="home"
@@ -63,39 +62,38 @@ const Navbar = () => {
               duration={500}
               spy={true}
               onSetActive={() => setActiveLink('home')}
-              className="text-3xl font-extrabold tracking-wider cursor-pointer"
+              className="text-3xl font-extrabold tracking-wider cursor-pointer flex items-center gap-2"
             >
-              <span className="bg-gradient-to-r from-emerald-500 to-sky-500 bg-clip-text text-transparent">
-                
+              <span className="text-neon-green glitch-effect" data-text="SHIVAM">
+                SHIVAM
               </span>
-              <span className="text-gray-300">.dev</span>
+              <span className="text-neon-pink text-sm border border-neon-pink px-1 rounded">.DEV_OP</span>
             </ScrollLink>
           </motion.div>
 
-          {/* --- ENHANCED: Desktop Menu (with Sliding Pill) --- */}
-          <div className="hidden md:flex items-center space-x-2 bg-gray-800/50 rounded-full p-1 border border-gray-700/50">
+          {/* --- ENHANCED: Desktop Menu (Cyberpunk Style) --- */}
+          <div className="hidden md:flex items-center space-x-1 bg-cyber-gray/50 rounded-none skew-x-[-10deg] border border-neon-blue/30 p-1 backdrop-blur-sm">
             {navItems.map((item) => (
-              <motion.div key={item.name} whileTap={{ scale: 0.95 }} className="relative">
+              <motion.div key={item.name} whileTap={{ scale: 0.95 }} className="relative skew-x-[10deg]">
                 <ScrollLink
                   to={item.section}
                   smooth={true}
                   duration={500}
-                  offset={-96} 
+                  offset={-96}
                   spy={true}
                   onSetActive={() => setActiveLink(item.section)}
-                  className={`relative z-10 flex items-center px-4 py-2 rounded-full transition-all duration-300 cursor-pointer ${
-                    activeLink === item.section
-                      ? 'text-white'
-                      : 'text-gray-300 hover:text-white'
-                  }`}
+                  className={`relative z-10 flex items-center px-4 py-2 text-sm font-bold tracking-wider transition-all duration-300 cursor-pointer uppercase ${activeLink === item.section
+                      ? 'text-cyber-black'
+                      : 'text-gray-400 hover:text-neon-blue'
+                    }`}
                 >
-                  <span className="mr-2">{item.icon}</span>
-                  {item.name}
+                  <span className="mr-2 text-xs opacity-70">{item.icon}</span>
+                  {item.name.split(': ')[1]}
                 </ScrollLink>
-                
+
                 {activeLink === item.section && (
                   <motion.div
-                    className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 shadow-lg z-0"
+                    className="absolute inset-0 bg-neon-green shadow-[0_0_15px_var(--neon-green)] z-0"
                     layoutId="activePill"
                     transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                   />
@@ -104,26 +102,26 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Mobile Hamburger (Unchanged) */}
-          <div className="md:hidden text-gray-200 cursor-pointer z-50" onClick={() => setIsOpen(!isOpen)}>
+          {/* Mobile Hamburger */}
+          <div className="md:hidden text-neon-green cursor-pointer z-50 hover:text-neon-blue transition-colors" onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? <FaTimes size={28} /> : <FaBars size={28} />}
           </div>
         </div>
       </motion.nav>
 
-      {/* --- Mobile Menu (Unchanged) --- */}
+      {/* --- Mobile Menu --- */}
       <AnimatePresence>
         {isOpen && (
           <>
             <motion.div
-              className="fixed inset-0 bg-black/80 backdrop-blur-lg z-30 md:hidden"
+              className="fixed inset-0 bg-cyber-black/90 backdrop-blur-md z-30 md:hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
             />
             <motion.div
-              className="fixed top-0 right-0 h-full w-4/5 bg-gray-900/95 backdrop-blur-xl z-30 md:hidden p-8"
+              className="fixed top-0 right-0 h-full w-4/5 bg-cyber-gray border-l border-neon-green shadow-[0_0_30px_rgba(0,255,65,0.2)] z-30 md:hidden p-8 font-gaming"
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
@@ -138,31 +136,30 @@ const Navbar = () => {
                       animate={{ x: 0, opacity: 1 }}
                       exit={{ x: 50, opacity: 0 }}
                       transition={{ delay: i * 0.05 }}
-                      whileHover={{ x: 5 }}
+                      whileHover={{ x: 10 }}
                       whileTap={{ scale: 0.95 }}
                     >
                       <ScrollLink
                         to={item.section}
                         smooth={true}
                         duration={500}
-                        offset={-96} // Adjusted offset
+                        offset={-96}
                         onClick={() => setIsOpen(false)}
                         onSetActive={() => setActiveLink(item.section)}
-                        className={`flex items-center text-2xl font-medium transition duration-300 cursor-pointer ${
-                          activeLink === item.section
-                            ? 'text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-sky-500'
-                            : 'text-gray-300 hover:text-white'
-                        }`}
+                        className={`flex items-center text-xl font-bold uppercase tracking-widest transition duration-300 cursor-pointer border-l-4 pl-4 ${activeLink === item.section
+                            ? 'border-neon-green text-neon-green shadow-[inset_10px_0_20px_-10px_rgba(0,255,65,0.3)]'
+                            : 'border-transparent text-gray-400 hover:text-white hover:border-neon-blue'
+                          }`}
                       >
-                        <span className="mr-4">{item.icon}</span>
+                        <span className="mr-4 text-sm">{item.icon}</span>
                         {item.name}
                       </ScrollLink>
                     </motion.div>
                   ))}
                 </div>
                 <div className="pt-8 border-t border-gray-800">
-                  <p className="text-gray-500 text-sm">
-                    © {new Date().getFullYear()} Shivam Kumar.
+                  <p className="text-gray-500 text-xs tracking-widest uppercase">
+                    System Status: Online <span className="inline-block w-2 h-2 bg-neon-green rounded-full animate-pulse ml-2"></span>
                   </p>
                 </div>
               </div>

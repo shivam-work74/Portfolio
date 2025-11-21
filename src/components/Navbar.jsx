@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link as ScrollLink } from 'react-scroll';
-import { FaBars, FaTimes, FaHome, FaUser, FaCode, FaTools, FaEnvelope } from 'react-icons/fa';
+import { FaBars, FaTimes, FaHome, FaUser, FaCode, FaTools, FaEnvelope, FaGamepad } from 'react-icons/fa';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 
 const Navbar = () => {
@@ -31,6 +31,7 @@ const Navbar = () => {
     { name: 'MISSION: HOME', section: 'home', icon: <FaHome /> },
     { name: 'INTEL: ABOUT', section: 'about', icon: <FaUser /> },
     { name: 'OPERATIONS: PROJECTS', section: 'projects', icon: <FaCode /> },
+    { name: 'ARCADE: GAMES', section: 'game-hub', icon: <FaGamepad /> },
     { name: 'ARSENAL: SKILLS', section: 'skills', icon: <FaTools /> },
     { name: 'COMMS: CONTACT', section: 'contact', icon: <FaEnvelope /> },
   ];
@@ -46,8 +47,8 @@ const Navbar = () => {
       {/* --- Desktop Navigation --- */}
       <motion.nav
         className={`fixed top-0 w-full z-40 transition-all duration-300 font-gaming ${scrolled
-            ? 'bg-cyber-black/90 glass-panel border-b border-neon-green/30 py-3'
-            : 'bg-transparent py-4'
+          ? 'bg-cyber-black/90 glass-panel border-b border-neon-green/30 py-3'
+          : 'bg-transparent py-4'
           }`}
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -83,8 +84,8 @@ const Navbar = () => {
                   spy={true}
                   onSetActive={() => setActiveLink(item.section)}
                   className={`relative z-10 flex items-center px-4 py-2 text-sm font-bold tracking-wider transition-all duration-300 cursor-pointer uppercase ${activeLink === item.section
-                      ? 'text-cyber-black'
-                      : 'text-gray-400 hover:text-neon-blue'
+                    ? 'text-cyber-black'
+                    : 'text-gray-400 hover:text-neon-blue'
                     }`}
                 >
                   <span className="mr-2 text-xs opacity-70">{item.icon}</span>
@@ -147,8 +148,8 @@ const Navbar = () => {
                         onClick={() => setIsOpen(false)}
                         onSetActive={() => setActiveLink(item.section)}
                         className={`flex items-center text-xl font-bold uppercase tracking-widest transition duration-300 cursor-pointer border-l-4 pl-4 ${activeLink === item.section
-                            ? 'border-neon-green text-neon-green shadow-[inset_10px_0_20px_-10px_rgba(0,255,65,0.3)]'
-                            : 'border-transparent text-gray-400 hover:text-white hover:border-neon-blue'
+                          ? 'border-neon-green text-neon-green shadow-[inset_10px_0_20px_-10px_rgba(0,255,65,0.3)]'
+                          : 'border-transparent text-gray-400 hover:text-white hover:border-neon-blue'
                           }`}
                       >
                         <span className="mr-4 text-sm">{item.icon}</span>

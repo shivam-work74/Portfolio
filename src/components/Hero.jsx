@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaGamepad } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaGithub, FaLinkedin, FaGamepad, FaBrain } from 'react-icons/fa';
 import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
+import MiniGame from './MiniGame';
+import MemoryGame from './MemoryGame';
 
 // --- Mouse position hook ---
 const useMousePosition = () => {
@@ -63,6 +65,7 @@ const itemVariants = {
 
 const Hero = () => {
   const { x, y } = useMousePosition();
+  const [activeGame, setActiveGame] = useState(null); // 'cyber-defense' or 'neural-nexus'
 
   return (
     <section
@@ -116,26 +119,33 @@ const Hero = () => {
 
           {/* --- Buttons --- */}
           <motion.div
-            className="flex flex-col sm:flex-row gap-6 mb-10"
+            className="flex flex-col lg:flex-row gap-6 mb-10 items-center"
             variants={itemVariants}
           >
             <a
               href="#projects"
-              className="group relative inline-block text-lg font-bold tracking-wider uppercase"
+              className="group relative inline-block text-lg font-bold tracking-wider uppercase w-full lg:w-auto"
             >
               <span
                 className="absolute inset-0 bg-neon-green opacity-50 blur-lg transition-all duration-300 group-hover:opacity-100 group-hover:blur-xl"
               />
               <span className="relative flex items-center justify-center px-8 py-3 bg-cyber-black border border-neon-green text-neon-green hover:bg-neon-green hover:text-cyber-black transition-all duration-300 clip-path-polygon">
-                <FaGamepad className="mr-2" />
                 Start Mission
                 <HiOutlineArrowNarrowRight className="ml-2 transition-transform transform group-hover:translate-x-1" />
               </span>
             </a>
 
+            <a
+              href="#game-hub"
+              className="group relative flex items-center justify-center px-8 py-3 bg-gray-900 border border-neon-blue text-neon-blue font-bold text-lg tracking-wider uppercase hover:bg-neon-blue/20 hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] transition-all duration-300 clip-path-polygon w-full lg:w-auto"
+            >
+              <FaGamepad className="mr-2 text-xl animate-pulse" />
+              Enter Arcade
+            </a>
+
             <motion.a
               href="#contact"
-              className="group relative flex items-center justify-center px-8 py-3 bg-transparent border border-neon-blue text-neon-blue font-bold text-lg tracking-wider uppercase hover:bg-neon-blue/10 hover:shadow-[0_0_15px_var(--neon-blue)] transition-all duration-300"
+              className="group relative flex items-center justify-center px-8 py-3 bg-transparent border border-gray-600 text-gray-300 font-bold text-lg tracking-wider uppercase hover:border-white hover:text-white transition-all duration-300 w-full lg:w-auto"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -182,6 +192,17 @@ const Hero = () => {
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
         </svg>
       </div>
+
+      {/* --- Game Modals --- */}
+      <AnimatePresence>
+        {activeGame === 'cyber-defense' && (
+          <MiniGame onClose={() => setActiveGame(null)} />
+        )}
+        {activeGame === 'neural-nexus' && (
+          <MemoryGame onClose={() => setActiveGame(null)} />
+        )}
+      </AnimatePresence>
+
     </section>
   );
 };

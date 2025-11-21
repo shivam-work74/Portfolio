@@ -2,14 +2,14 @@ import React, { Suspense, lazy } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 
-// Lazy load our sections
+
 const About = lazy(() => import('./components/About'));
 const Projects = lazy(() => import('./components/Projects'));
-const TaskShowcase = lazy(() => import('./components/TaskShowcase'));
+const GameHub = lazy(() => import('./components/GameHub'));
 const Skills = lazy(() => import('./components/Skills'));
-const Contact = lazy(() => import('./components/Contact')); // <-- 1. IMPORT IT
+const Contact = lazy(() => import('./components/Contact'));
+const ChatBot = lazy(() => import('./components/ChatBot')); // <-- 1. IMPORT IT
 
-// A simple loading "spinner"
 const SectionLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-gray-900">
     <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
@@ -26,9 +26,10 @@ function App() {
       <Suspense fallback={<SectionLoader />}>
         <About />
         <Projects />
-        <TaskShowcase />
+        <GameHub />
         <Skills />
         <Contact />
+        <ChatBot />
       </Suspense>
     </div>
   );

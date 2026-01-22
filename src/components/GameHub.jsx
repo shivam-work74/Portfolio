@@ -1,139 +1,191 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaGamepad, FaBrain, FaPlay, FaTrophy, FaDragon, FaRocket } from 'react-icons/fa';
-import MiniGame from './MiniGame';
-import MemoryGame from './MemoryGame';
-import SnakeGame from './SnakeGame';
-import FlappyGame from './FlappyGame';
+import { gamesData } from '../constants/data';
+import { FaGamepad, FaMicrochip, FaDna, FaShieldAlt, FaRocket } from 'react-icons/fa';
+
+// Import game components
+import MiniGame from './MiniGame'; // Cyber Defense
+import MemoryGame from './MemoryGame'; // Neural Nexus
+import SnakeGame from './SnakeGame'; // Cyber Serpent
+import FlappyGame from './FlappyGame'; // Gravity Glitch
+
+const GameIcon = ({ id }) => {
+    switch (id) {
+        case 'cyber-defense': return <FaShieldAlt size={40} />;
+        case 'neural-nexus': return <FaMicrochip size={40} />;
+        case 'cyber-serpent': return <FaDna size={40} />;
+        case 'gravity-glitch': return <FaRocket size={40} />;
+        default: return <FaGamepad size={40} />;
+    }
+}
+
+const LabCard = ({ game, index, setActiveGame }) => {
+    return (
+        <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ delay: index * 0.1, duration: 0.5 }}
+            viewport={{ once: true }}
+            className="group relative h-[400px] bg-black/40 border border-white/10 backdrop-blur-sm overflow-hidden hover:border-international-orange/50 transition-all duration-500"
+        >
+            {/* Holographic Scanline */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-international-orange/50 shadow-[0_0_20px_rgba(255,79,0,0.5)] transform -translate-y-full group-hover:translate-y-[400px] transition-transform duration-[1.5s] ease-linear pointer-events-none z-20" />
+
+            {/* Background Grid */}
+            <div className="absolute inset-0 bg-grid-pattern opacity-[0.05] group-hover:opacity-[0.1] transition-opacity duration-500" />
+
+            <div className="relative z-10 p-8 h-full flex flex-col justify-between">
+                <div>
+                    <div className="flex justify-between items-start mb-6">
+                        <div className="text-white/20 group-hover:text-international-orange transition-colors duration-500">
+                            <GameIcon id={game.id} />
+                        </div>
+                        <div className="font-mono text-[10px] text-international-orange border border-international-orange/30 px-2 py-1 bg-black/50">
+                            VER. 1.0.{index}
+                        </div>
+                    </div>
+
+                    <h3 className="font-display text-3xl font-bold text-white mb-2 leading-none group-hover:translate-x-2 transition-transform duration-300">
+                        {game.title}
+                    </h3>
+                    <div className="w-12 h-1 bg-white/10 group-hover:bg-international-orange transition-colors duration-300 mb-4" />
+
+                    <p className="font-sans text-sm text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors">
+                        {game.description}
+                    </p>
+                </div>
+
+                <button
+                    onClick={() => setActiveGame(game.id)}
+                    className="w-full py-4 border-t border-white/10 flex justify-between items-center group-hover:border-international-orange/30 transition-colors"
+                >
+                    <span className="font-mono text-xs uppercase tracking-widest text-gray-500 group-hover:text-white transition-colors">
+                        [Initialize]
+                    </span>
+                    <FaGamepad className="text-gray-600 group-hover:text-international-orange transition-colors" />
+                </button>
+            </div>
+
+            {/* Corner Markers */}
+            <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/20 group-hover:border-international-orange transition-colors" />
+            <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/20 group-hover:border-international-orange transition-colors" />
+            <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-white/20 group-hover:border-international-orange transition-colors" />
+            <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/20 group-hover:border-international-orange transition-colors" />
+
+        </motion.div>
+    )
+}
 
 const GameHub = () => {
     const [activeGame, setActiveGame] = useState(null);
 
-    const games = [
-        {
-            id: 'cyber-defense',
-            title: 'CYBER DEFENSE',
-            description: 'Defend the codebase from incoming bugs in this Space Invaders-style shooter.',
-            icon: <FaGamepad className="text-5xl text-neon-blue" />,
-            color: 'neon-blue',
-            component: MiniGame
-        },
-        {
-            id: 'neural-nexus',
-            title: 'NEURAL NEXUS',
-            description: 'Test your memory protocols. Match tech stack icons in Solo or PvP modes.',
-            icon: <FaBrain className="text-5xl text-neon-pink" />,
-            color: 'neon-pink',
-            component: MemoryGame
-        },
-        {
-            id: 'cyber-serpent',
-            title: 'CYBER SERPENT',
-            description: 'Navigate the grid, collect data packets, and grow your system. Classic Snake evolved.',
-            icon: <FaDragon className="text-5xl text-neon-green" />,
-            color: 'neon-green',
-            component: SnakeGame
-        },
-        {
-            id: 'gravity-glitch',
-            title: 'GRAVITY GLITCH',
-            description: 'Defy gravity and navigate through the firewall. One tap to jump, infinite challenge.',
-            icon: <FaRocket className="text-5xl text-yellow-400" />,
-            color: 'yellow-400',
-            component: FlappyGame
+    const closeModal = () => setActiveGame(null);
+
+    const getGameComponent = (id) => {
+        switch (id) {
+            case 'cyber-defense': return <MiniGame onClose={closeModal} />;
+            case 'neural-nexus': return <MemoryGame onClose={closeModal} />;
+            case 'cyber-serpent': return <SnakeGame onClose={closeModal} />;
+            case 'gravity-glitch': return <FlappyGame onClose={closeModal} />;
+            default: return null;
         }
-    ];
+    };
 
     return (
-        <section id="game-hub" className="py-20 relative overflow-hidden min-h-screen flex items-center">
-            {/* Background Elements */}
-            <div className="absolute inset-0 bg-cyber-black opacity-90 z-0"></div>
-            <div className="absolute top-0 left-0 w-full h-full bg-grid-pattern opacity-10 z-0"></div>
+        <section id="game-hub" className="min-h-screen py-24 bg-transparent flex items-center relative overflow-hidden">
 
-            <div className="container mx-auto px-4 relative z-10">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="text-center mb-16"
-                >
-                    <h2 className="text-4xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-neon-blue via-neon-pink to-neon-green glitch-effect" data-text="CYBER ARCADE">
-                        CYBER ARCADE
-                    </h2>
-                    <p className="text-gray-400 max-w-2xl mx-auto text-lg font-gaming">
-                        <span className="text-neon-green mr-2">&gt;</span>
-                        Select a simulation to test your skills.
-                    </p>
-                </motion.div>
+            <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
 
-                <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                    {games.map((game, index) => (
-                        <motion.div
+                {/* Header */}
+                <div className="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-white/10 pb-8">
+                    <div>
+                        <h2 className="text-5xl md:text-8xl font-display font-bold text-white mb-2 leading-none">
+                            R&D<br />LAB
+                        </h2>
+                        <p className="font-mono text-international-orange tracking-widest uppercase text-sm mt-4">
+                            // Experimental Simulations
+                        </p>
+                    </div>
+                    <div className="mt-8 md:mt-0 max-w-sm text-right">
+                        <p className="font-sans text-sm text-gray-400">
+                            Access authorized experiments. Test cognitive reflexes and problem-solving algorithms in a controlled environment.
+                        </p>
+                    </div>
+                </div>
+
+                {/* Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {gamesData.map((game, i) => (
+                        <LabCard
                             key={game.id}
-                            initial={{ opacity: 0, y: 50 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.1 }}
-                            whileHover={{ scale: 1.02 }}
-                            className={`glass-panel p-8 rounded-2xl border border-${game.color}/30 hover:border-${game.color} transition-all duration-300 group relative overflow-hidden flex flex-col`}
-                        >
-                            {/* Hover Glow */}
-                            <div className={`absolute inset-0 bg-${game.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}></div>
-
-                            <div className="flex flex-col items-center text-center flex-grow">
-                                <div className={`mb-6 p-6 rounded-full bg-gray-900/50 border border-${game.color}/20 group-hover:border-${game.color} group-hover:shadow-[0_0_30px_rgba(0,0,0,0.5)] transition-all duration-300`}>
-                                    {game.icon}
-                                </div>
-
-                                <h3 className={`text-2xl font-bold mb-4 text-white group-hover:text-${game.color} transition-colors font-gaming`}>
-                                    {game.title}
-                                </h3>
-
-                                <p className="text-gray-400 mb-8 flex-grow">
-                                    {game.description}
-                                </p>
-
-                                <button
-                                    onClick={() => setActiveGame(game.id)}
-                                    className={`group relative px-8 py-3 bg-transparent border border-${game.color} text-${game.color} font-bold uppercase tracking-widest hover:bg-${game.color} hover:text-black transition-all duration-300 clip-path-polygon flex items-center gap-2 w-full justify-center`}
-                                >
-                                    <FaPlay className="text-sm" />
-                                    Initialize
-                                </button>
-                            </div>
-                        </motion.div>
+                            game={game}
+                            index={i}
+                            setActiveGame={setActiveGame}
+                        />
                     ))}
                 </div>
 
-                {/* High Score Teaser */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="mt-16 text-center"
-                >
-                    <div className="inline-flex items-center gap-2 text-gray-500 text-sm uppercase tracking-widest border border-gray-800 px-4 py-2 rounded-full bg-black/30">
-                        <FaTrophy className="text-yellow-500" />
-                        <span>Scores saved to local memory</span>
-                    </div>
-                </motion.div>
             </div>
 
-            {/* Game Modals */}
+            {/* Game Modal - Simulation Chamber */}
             <AnimatePresence>
-                {activeGame === 'cyber-defense' && (
-                    <MiniGame onClose={() => setActiveGame(null)} />
-                )}
-                {activeGame === 'neural-nexus' && (
-                    <MemoryGame onClose={() => setActiveGame(null)} />
-                )}
-                {activeGame === 'cyber-serpent' && (
-                    <SnakeGame onClose={() => setActiveGame(null)} />
-                )}
-                {activeGame === 'gravity-glitch' && (
-                    <FlappyGame onClose={() => setActiveGame(null)} />
+                {activeGame && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+                    >
+                        <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={closeModal} />
+
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            className="relative z-50 w-full max-w-6xl h-[85vh] bg-[#0a0a0a] border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col"
+                        >
+                            {/* Terminal Header */}
+                            <div className="h-12 border-b border-white/10 bg-black/50 flex items-center justify-between px-6">
+                                <div className="flex items-center gap-4">
+                                    <div className="flex gap-2">
+                                        <div className="w-3 h-3 rounded-full bg-red-500/50" />
+                                        <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
+                                        <div className="w-3 h-3 rounded-full bg-green-500/50" />
+                                    </div>
+                                    <span className="font-mono text-xs text-gray-400 uppercase tracking-widest">
+                                        RUNNING_PROCESS: {activeGame.toUpperCase()}
+                                    </span>
+                                </div>
+                                <button
+                                    onClick={closeModal}
+                                    className="font-mono text-xs text-red-500 hover:text-white uppercase tracking-widest transition-colors"
+                                >
+                                    [TERMINATE_PROCESS_X]
+                                </button>
+                            </div>
+
+                            {/* Game Viewport */}
+                            <div className="flex-1 relative bg-grid-pattern bg-[length:30px_30px] opacity-100">
+                                <div className="absolute inset-0 bg-black/20 pointer-events-none" />
+                                {getGameComponent(activeGame)}
+                            </div>
+
+                            {/* Footer Status */}
+                            <div className="h-8 border-t border-white/10 bg-black/50 flex items-center px-6 gap-6">
+                                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                                <span className="font-mono text-[10px] text-green-500 uppercase tracking-widest">
+                                    SIMULATION ACTIVE
+                                </span>
+                                <span className="font-mono text-[10px] text-gray-600 uppercase tracking-widest ml-auto">
+                                    CPU: 12% | MEM: 405MB
+                                </span>
+                            </div>
+
+                        </motion.div>
+                    </motion.div>
                 )}
             </AnimatePresence>
+
         </section>
     );
 };

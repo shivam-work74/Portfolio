@@ -1,196 +1,87 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaGamepad } from 'react-icons/fa';
-import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
-
-// --- Mouse position hook ---
-const useMousePosition = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
-
-  return mousePosition;
-};
-
-// --- Typing Animation Component ---
-const TypingText = ({ text, delay = 0 }) => {
-  const [displayedText, setDisplayedText] = useState('');
-
-  useEffect(() => {
-    let index = 0;
-    const timeout = setTimeout(() => {
-      const interval = setInterval(() => {
-        setDisplayedText((prev) => prev + text.charAt(index));
-        index++;
-        if (index === text.length) clearInterval(interval);
-      }, 100);
-      return () => clearInterval(interval);
-    }, delay);
-    return () => clearTimeout(timeout);
-  }, [text, delay]);
-
-  return <span>{displayedText}<span className="animate-pulse">_</span></span>;
-};
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { type: 'spring', stiffness: 100 },
-  },
-};
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { heroData } from '../constants/data';
+import { FaArrowDown } from 'react-icons/fa';
 
 const Hero = () => {
-  const { x, y } = useMousePosition();
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
-    <section
+    <header
       id="home"
-      className="relative min-h-screen flex justify-center items-center text-white overflow-hidden pt-24 font-gaming"
-      style={{
-        background: `
-          radial-gradient(
-            600px circle at ${x}px ${y}px, 
-            rgba(0, 255, 65, 0.1),
-            transparent 80%
-          )
-        `,
-      }}
+      ref={containerRef}
+      className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden px-6 pt-20"
     >
+      {/* Background Text Texture */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none select-none overflow-hidden">
+        <span className="text-[20vw] font-display font-bold whitespace-nowrap animate-spin-slow">
+          ARCHITECTURE
+        </span>
+      </div>
 
-      {/* --- Content Container --- */}
-      <div className="relative z-20 flex flex-col items-center text-center p-4 max-w-5xl mx-auto">
+      <motion.div
+        style={{ y, opacity }}
+        className="relative z-10 text-center flex flex-col items-center max-w-5xl"
+      >
         <motion.div
-          className="flex flex-col items-center"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-6 flex flex-col items-center"
         >
-          <motion.div
-            className="text-lg md:text-xl text-neon-green font-medium mb-4 tracking-widest uppercase border border-neon-green px-4 py-1 rounded-full bg-cyber-black/50 backdrop-blur-sm"
-            variants={itemVariants}
-          >
-            <span className="mr-2">System Initialized</span>
-            <span className="inline-block w-2 h-2 bg-neon-green rounded-full animate-pulse"></span>
-          </motion.div>
+          <span className="text-sm font-mono tracking-[0.3em] text-international-orange uppercase mb-4 block">
+            {heroData.subtitle}
+          </span>
 
-          <motion.h1
-            className="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight glitch-effect"
-            data-text="LEVEL UP YOUR WEB EXPERIENCE"
-            variants={itemVariants}
-          >
-            LEVEL UP <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-green via-neon-blue to-neon-pink">
-              YOUR WEB EXPERIENCE
-            </span>
-          </motion.h1>
-
-          <motion.div
-            className="text-lg md:text-2xl text-gray-300 mb-10 max-w-2xl h-20"
-            variants={itemVariants}
-          >
-            <span className="text-neon-blue">&gt; </span>
-            <TypingText text="Initializing Full-Stack Protocols..." delay={1000} />
-          </motion.div>
-
-          {/* --- Buttons --- */}
-          <motion.div
-            className="flex flex-col lg:flex-row gap-6 mb-10 items-center"
-            variants={itemVariants}
-          >
-            <a
-              href="#projects"
-              className="group relative inline-block text-lg font-bold tracking-wider uppercase w-full lg:w-auto"
-            >
-              <span
-                className="absolute inset-0 bg-neon-green opacity-50 blur-lg transition-all duration-300 group-hover:opacity-100 group-hover:blur-xl"
-              />
-              <span className="relative flex items-center justify-center px-8 py-3 bg-cyber-black border border-neon-green text-neon-green hover:bg-neon-green hover:text-cyber-black transition-all duration-300 clip-path-polygon">
-                Start Mission
-                <HiOutlineArrowNarrowRight className="ml-2 transition-transform transform group-hover:translate-x-1" />
+          <h1 className="text-5xl md:text-8xl lg:text-9xl font-display font-bold leading-[0.9] tracking-tighter mb-8 mix-blend-difference">
+            {heroData.title.split(' ').map((word, i) => (
+              <span key={i} className="block hover:text-outline hover:text-transparent transition-all duration-500 cursor-default">
+                {word}
               </span>
-            </a>
-
-            <a
-              href="#game-hub"
-              className="group relative flex items-center justify-center px-8 py-3 bg-gray-900 border border-neon-blue text-neon-blue font-bold text-lg tracking-wider uppercase hover:bg-neon-blue/20 hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] transition-all duration-300 clip-path-polygon w-full lg:w-auto"
-            >
-              <FaGamepad className="mr-2 text-xl animate-pulse" />
-              Enter Arcade
-            </a>
-
-            <motion.a
-              href="#contact"
-              className="group relative flex items-center justify-center px-8 py-3 bg-transparent border border-gray-600 text-gray-300 font-bold text-lg tracking-wider uppercase hover:border-white hover:text-white transition-all duration-300 w-full lg:w-auto"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Contact Base
-            </motion.a>
-          </motion.div>
-
-          {/* Social Links */}
-          <motion.div
-            className="flex gap-8 items-center"
-            variants={itemVariants}
-          >
-            <a
-              href="https://github.com/shivam-work74"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-500 hover:text-neon-green transition-all transform hover:scale-110"
-              aria-label="GitHub Profile"
-            >
-              <FaGithub className="w-8 h-8" />
-            </a>
-            <a
-              href="https://linkedin.com/in/your-profile"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-500 hover:text-neon-blue transition-all transform hover:scale-110"
-              aria-label="LinkedIn Profile"
-            >
-              <FaLinkedin className="w-8 h-8" />
-            </a>
-          </motion.div>
+            ))}
+          </h1>
         </motion.div>
-      </div>
 
-      {/* Scroll Down Arrow */}
-      <div className="absolute bottom-10 animate-bounce text-neon-green">
-        <svg
-          className="w-8 h-8"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5, duration: 1 }}
+          className="text-gray-400 font-sans max-w-lg text-lg leading-relaxed mb-12"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-        </svg>
-      </div>
+          {heroData.typingText[0]}
+        </motion.p>
 
-    </section>
+        {/* Call to Action */}
+        <div className="flex gap-6">
+          <a href="#projects" className="group relative px-8 py-4 bg-white text-black font-bold tracking-widest uppercase text-xs overflow-hidden">
+            <span className="relative z-10 group-hover:text-white transition-colors duration-300">View Data</span>
+            <div className="absolute inset-0 bg-carbon transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+          </a>
+          <a href="#contact" className="group relative px-8 py-4 border border-white/20 text-white font-bold tracking-widest uppercase text-xs hover:bg-white/5 transition-colors">
+            <span>Contact</span>
+          </a>
+        </div>
+
+      </motion.div>
+
+      {/* Scroll Indicator */}
+      <motion.div
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 mix-blend-difference"
+        animate={{ y: [0, 10, 0] }}
+        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+      >
+        <span className="text-[10px] font-mono tracking-widest uppercase">Scroll</span>
+        <FaArrowDown className="text-xs" />
+      </motion.div>
+
+    </header>
   );
 };
 

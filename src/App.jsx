@@ -1,36 +1,76 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense } from 'react';
+import useStore from './store';
+
+// Components
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import About from './components/About';
+import Projects from './components/Projects';
+import Skills from './components/Skills';
+import GameHub from './components/GameHub';
+import Contact from './components/Contact';
+import ChatBot from './components/ChatBot';
+import OpeningOverlay from './components/OpeningOverlay';
+import SectionLoader from './components/SectionLoader';
+import SmoothScroll from './components/SmoothScroll';
+import Certifications from './components/Certifications';
+
+// 3D Scene
+import Scene from './canvas/Scene';
 
 
-const About = lazy(() => import('./components/About'));
-const Projects = lazy(() => import('./components/Projects'));
-const GameHub = lazy(() => import('./components/GameHub'));
-const Skills = lazy(() => import('./components/Skills'));
-const Contact = lazy(() => import('./components/Contact'));
-const ChatBot = lazy(() => import('./components/ChatBot')); // <-- 1. IMPORT IT
 
-const SectionLoader = () => (
-  <div className="min-h-screen flex items-center justify-center bg-gray-900">
-    <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
-  </div>
-);
+const App = () => {
+  const hasStarted = useStore((state) => state.hasStarted);
 
-function App() {
   return (
-    <div className="bg-cyber-black min-h-screen text-white font-gaming bg-grid-pattern relative overflow-x-hidden">
-      <div className="absolute inset-0 bg-radial-gradient from-transparent to-cyber-black pointer-events-none"></div>
-      <Navbar />
-      <Hero />
+    <div className="bg-studio-black min-h-screen text-white relative">
 
-      <Suspense fallback={<SectionLoader />}>
-        <About />
-        <Projects />
-        <GameHub />
-        <Skills />
-        <Contact />
-        <ChatBot />
-      </Suspense>
+
+      <OpeningOverlay />
+
+      {/* 3D Background - Persistent */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <Scene />
+      </div>
+
+      {hasStarted && (
+        <SmoothScroll>
+          {/* Navbar */}
+          <Navbar />
+
+          <main className="relative z-10 w-full">
+            <Hero />
+
+            <Suspense fallback={<SectionLoader />}>
+              <About />
+            </Suspense>
+
+            <Suspense fallback={<SectionLoader />}>
+              <Projects />
+            </Suspense>
+
+            <Suspense fallback={<SectionLoader />}>
+              <Skills />
+            </Suspense>
+
+            <Suspense fallback={<SectionLoader />}>
+              <Certifications />
+            </Suspense>
+
+            <Suspense fallback={<SectionLoader />}>
+              <GameHub />
+            </Suspense>
+
+            <Suspense fallback={<SectionLoader />}>
+              <Contact />
+            </Suspense>
+          </main>
+
+          {/* Floating Chatbot */}
+          <ChatBot />
+        </SmoothScroll>
+      )}
     </div>
   );
 }

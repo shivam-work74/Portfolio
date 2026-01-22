@@ -26,6 +26,13 @@ const useStore = create((set) => ({
     setMuted: (muted) => set({ isMuted: muted }),
     interactionSoundTrigger: 0, // specialized trigger to listen to
     playInteractionSound: () => set((state) => ({ interactionSoundTrigger: state.interactionSoundTrigger + 1 })),
+
+    // Achievement System
+    unlockedAchievements: [],
+    unlockAchievement: (id) => set((state) => {
+        if (state.unlockedAchievements.includes(id)) return state;
+        return { unlockedAchievements: [...state.unlockedAchievements, id] };
+    }),
 }))
 
 export default useStore

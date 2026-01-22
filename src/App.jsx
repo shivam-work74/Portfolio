@@ -14,6 +14,8 @@ import OpeningOverlay from './components/OpeningOverlay';
 import SectionLoader from './components/SectionLoader';
 import SmoothScroll from './components/SmoothScroll';
 import Certifications from './components/Certifications';
+import AchievementToast from './components/AchievementToast';
+import Timeline from './components/Timeline';
 
 // 3D Scene
 import Scene from './canvas/Scene';
@@ -47,6 +49,10 @@ const App = () => {
             </Suspense>
 
             <Suspense fallback={<SectionLoader />}>
+              <Timeline />
+            </Suspense>
+
+            <Suspense fallback={<SectionLoader />}>
               <Projects />
             </Suspense>
 
@@ -69,6 +75,9 @@ const App = () => {
 
           {/* Floating Chatbot */}
           <ChatBot />
+
+          {/* Achievement Notifications */}
+          <AchievementToast />
         </SmoothScroll>
       )}
     </div>

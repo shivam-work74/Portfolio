@@ -155,6 +155,9 @@ export const achievements = [
     { id: 3, title: "Full Stack Hero", description: "Built 20+ full stack apps", unlocked: false },
     { id: 4, title: "Cloud Walker", description: "Deployed 15+ apps to cloud", unlocked: true },
     { id: 5, title: "App Wizard", description: "Created 5+ mobile apps", unlocked: false },
+    { id: 6, title: "Architect Initialized", description: "Systems online. Welcome to the workspace.", unlocked: false },
+    { id: 7, title: "Deep Diver", description: "Explored the depths of the digital interface.", unlocked: false },
+    { id: 8, title: "Lab Technician", description: "Accessed the experimental Game Hub.", unlocked: false },
 ];
 
 export const gamesData = [
@@ -235,5 +238,44 @@ export const certificationsData = [
         color: "#326CE5", // Kubernetes Blue
         icon: "FaDocker",
         pdf: "/certificates/demo_certificate.pdf"
+    }
+];
+
+export const timelineData = [
+    {
+        id: 1,
+        year: "2024 - PRESENT",
+        title: "Master of Computer Applications",
+        company: "Specialized in Full-Stack Architecture",
+        description: "Focusing on advanced distributed systems, cloud infrastructure, and human-centric design protocols.",
+        type: "education",
+        tags: ["Distributed Systems", "Cloud Ops", "UX Architecture"]
+    },
+    {
+        id: 2,
+        year: "2023 - 2024",
+        title: "Senior Web Developer",
+        company: "Freelance / Digital Agency",
+        description: "Architected high-scale web applications with React and Node.js. Optimized performance benchmarks by 40%.",
+        type: "experience",
+        tags: ["React", "Performance", "Optimization"]
+    },
+    {
+        id: 3,
+        year: "2022 - 2023",
+        title: "Frontend Developer Intern",
+        company: "Tech Start-up",
+        description: "Collaborated on UI/UX redesigns and implemented complex animations using GSAP and Framer Motion.",
+        type: "experience",
+        tags: ["UI/UX", "GSAP", "Animation"]
+    },
+    {
+        id: 4,
+        year: "2019 - 2022",
+        title: "Bachelor of Computer Applications",
+        company: "University Degree",
+        description: "Gained foundational knowledge in algorithms, database management, and early web technologies.",
+        type: "education",
+        tags: ["Algorithms", "DBMS", "Web Tech"]
     }
 ];

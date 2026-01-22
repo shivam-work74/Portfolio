@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { projectsData } from '../constants/data';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import soundManager from '../utils/SoundManager';
 
 const Card = ({ i, project, progress, range, targetScale }) => {
   const container = useRef(null);
@@ -25,6 +26,7 @@ const Card = ({ i, project, progress, range, targetScale }) => {
           filter,
           top: `calc(${i * 25}px)`
         }}
+        onMouseEnter={() => soundManager.playHover()}
         className="flex flex-col relative w-[1000px] h-[600px] rounded-3xl p-12 origin-top bg-[#1a1a1a] border border-white/10 overflow-hidden shadow-[0_-50px_100px_rgba(0,0,0,0.7)]"
       >
         {/* Card Header (Project Title & Category) */}
@@ -73,6 +75,8 @@ const Card = ({ i, project, progress, range, targetScale }) => {
                 href={project.demo}
                 target="_blank"
                 rel="noreferrer"
+                onMouseEnter={() => soundManager.playHover()}
+                onClick={() => soundManager.playClick()}
                 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:text-international-orange transition-colors"
                 style={{ pointerEvents: 'auto' }}
               >

@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { navItems } from '../constants/data';
+import useStore from '../store';
+import soundManager from '../utils/SoundManager';
+import { HiVolumeUp, HiVolumeOff } from 'react-icons/hi';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const isMuted = useStore((state) => state.isMuted);
+  const setMuted = useStore((state) => state.setMuted);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -13,6 +19,12 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const toggleMute = () => {
+    soundManager.init();
+    setMuted(!isMuted);
+    soundManager.setMuted(!isMuted);
+  };
 
   return (
     <>
@@ -36,14 +48,34 @@ const Navbar = () => {
               <a
                 key={item.name}
                 href={`#${item.section}`}
+                onMouseEnter={() => soundManager.playHover()}
+                onClick={() => soundManager.playClick()}
                 className="text-xs font-mono uppercase tracking-widest text-gray-400 hover:text-white transition-colors relative group"
               >
                 <span className="relative z-10">{item.name}</span>
                 <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-international-orange transition-all duration-300 group-hover:w-full"></span>
               </a>
             ))}
+
+            {/* Audio Toggle */}
+            <button
+              onClick={toggleMute}
+              onMouseEnter={() => soundManager.playHover()}
+              className="text-gray-400 hover:text-white transition-colors relative group p-2"
+              title={isMuted ? "Unmute" : "Mute"}
+            >
+              {isMuted ? <HiVolumeOff size={20} /> : <HiVolumeUp size={20} />}
+              <motion.span
+                animate={isMuted ? { scale: 0 } : { scale: [1, 1.2, 1] }}
+                transition={{ repeat: Infinity, duration: 2 }}
+                className="absolute top-0 right-0 w-2 h-2 bg-international-orange rounded-full"
+              />
+            </button>
+
             <a
               href="#contact"
+              onMouseEnter={() => soundManager.playHover()}
+              onClick={() => soundManager.playClick()}
               className="px-5 py-2 border border-white/20 rounded-full text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300"
             >
               Get in Touch

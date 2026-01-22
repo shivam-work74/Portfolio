@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import { contactData } from '../constants/data';
 import { FaPaperPlane, FaTerminal, FaWifi, FaCircle } from 'react-icons/fa';
+import soundManager from '../utils/SoundManager';
 
 const TerminalInput = ({ label, name, type = "text", placeholder, required = false }) => (
   <div className="mb-6">
@@ -14,6 +15,8 @@ const TerminalInput = ({ label, name, type = "text", placeholder, required = fal
         <textarea
           name={name}
           rows="4"
+          onMouseEnter={() => soundManager.playHover()}
+          onFocus={() => soundManager.playClick()}
           className="w-full bg-black/50 border border-white/10 p-4 font-mono text-sm text-gray-300 focus:text-white focus:outline-none focus:border-international-orange/50 focus:bg-white/5 transition-all resize-none"
           placeholder={placeholder}
           required={required}
@@ -22,6 +25,8 @@ const TerminalInput = ({ label, name, type = "text", placeholder, required = fal
         <input
           type={type}
           name={name}
+          onMouseEnter={() => soundManager.playHover()}
+          onFocus={() => soundManager.playClick()}
           className="w-full bg-black/50 border border-white/10 p-4 font-mono text-sm text-gray-300 focus:text-white focus:outline-none focus:border-international-orange/50 focus:bg-white/5 transition-all"
           placeholder={placeholder}
           required={required}
@@ -160,6 +165,8 @@ const Contact = () => {
               <button
                 type="submit"
                 disabled={loading}
+                onMouseEnter={() => soundManager.playHover()}
+                onClick={() => soundManager.playClick()}
                 className="w-full mt-4 px-8 py-4 bg-white text-black font-mono font-bold uppercase tracking-widest hover:bg-international-orange hover:text-white transition-all duration-300 flex justify-center items-center gap-3 group"
               >
                 {loading ? (

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useStore from '../store/index';
+import soundManager from '../utils/SoundManager';
 import { FaFingerprint, FaLock, FaMicrochip } from 'react-icons/fa';
 
 const OpeningOverlay = () => {
@@ -39,7 +40,13 @@ const OpeningOverlay = () => {
         return () => clearInterval(progressInterval);
     }, [hasStarted, bootStep]);
 
+    const unlockAchievement = useStore((state) => state.unlockAchievement);
+
     const handleInitialize = () => {
+        soundManager.init();
+        soundManager.playClick();
+        soundManager.playAmbient();
+        unlockAchievement(6); // Architect Initialized
         setStarted(true);
     };
 

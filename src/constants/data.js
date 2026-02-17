@@ -55,6 +55,16 @@ export const projectsData = [
         category: "Education"
     },
     {
+        id: 9,
+        title: "Fool's Fortune",
+        description: "An interesting and unique card game.",
+        github: "https://github.com/shivam-work74/Fools-Fortune.git",
+        demo: "https://fools-fortune-rqzq.vercel.app/",
+        image: "/fortune.png",
+        tags: ["React", "API"],
+        category: "Gaming"
+    },
+    {
         id: 3,
         title: "Resume Builder",
         description: "AI-powered resume builder that saves you time and effort.",
@@ -114,16 +124,6 @@ export const projectsData = [
         tags: ["React", "API"],
         category: "Utility"
     },
-    {
-        id: 9,
-        title: "Fool's Fortune",
-        description: "An interesting and unique card game.",
-        github: "https://github.com/shivam-work74/Fools-Fortune.git",
-        demo: "https://fools-fortune-rqzq.vercel.app/",
-        image: "/fortune.png",
-        tags: ["React", "API"],
-        category: "Gaming"
-    }
 ];
 
 export const skillsData = [
